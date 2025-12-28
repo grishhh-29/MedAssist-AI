@@ -9,5 +9,6 @@ langchain-community==0.3.26
 # Gemini integration
 # langchain-google-genai==1.0.6
 google-generativeai==0.5.4
+gunicorn
 
 -e .
