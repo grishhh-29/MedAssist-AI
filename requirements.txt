@@ -4,7 +4,9 @@ langchain-core==0.3.81
 langchain-community==0.3.27
 langchain-pinecone==0.2.8
 langchain-google-genai==2.0.11
-google-generativeai
+# google-generativeai
+google-generativeai>=0.8.0
+google-ai-generativelanguage>=0.6.16
 flask==3.1.1
 python-dotenv==1.1.0
 # pypdf==5.6.1 only used during indexing
