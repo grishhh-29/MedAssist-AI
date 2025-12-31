@@ -6,6 +6,12 @@
 /research
 /testing
 
+store_index.py
+store_index2.py
+store_index3.py
+
+/src/helper2.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
