@@ -1,49 +1,138 @@
-body,
-html {
+/* ===== Full-screen non-scrollable layout ===== */
+html,
+body {
 	height: 100%;
 	margin: 0;
+	overflow: hidden; /* ✅ no page scroll */
+}
+
+body {
 	background: rgb(44, 47, 59);
 	background: -webkit-linear-gradient(to right, rgb(40, 59, 34), rgb(54, 60, 70), rgb(32, 32, 43));
 	background: linear-gradient(to right, rgb(38, 51, 61), rgb(50, 55, 65), rgb(33, 33, 78));
 }
-.chat {
-	margin-top: auto;
-	margin-bottom: auto;
+
+/* page layout: header + main + footer */
+.page {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
+
+/* ===== Header ===== */
+.app-header {
+	background: rgba(0, 0, 0, 0.45);
+	backdrop-filter: blur(8px);
+	padding: 12px 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand-logo {
+	width: 40px;
+	height: 40px;
+	/* border-radius: 50%; */
+	background: lightsteelblue;
+	padding: 4px;
+}
+
+.brand-title {
+	font-size: 20px;
+	color: #ffffff;
+	margin: 0;
+	font-weight: 600;
+}
+
+.brand-subtitle {
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.6);
+	margin: 0;
+}
+
+.header-badge {
+	background: #58cc71;
+	color: #0f2d18;
+	font-size: 11px;
+	padding: 4px 10px;
+	border-radius: 12px;
+	font-weight: 600;
+}
+
+/* ===== Main Center Area ===== */
+.app-main {
+	flex: 1;
+	display: flex;
+	align-items: center; /* ✅ vertical center */
+	justify-content: center; /* ✅ horizontal center */
+	padding: 20px 0;
+	overflow: hidden; /* prevent main from scrolling */
+}
+
+.container-fluid {
+	padding-left: 15px;
+	padding-right: 15px;
+	width: 100%;
+}
+
+/* remove old margins so flex-centering works */
+.chat {
+	margin: 0;
+	width: 100%;
+}
+
+/* ===== Chat Card ===== */
 .card {
-	height: 500px;
 	border-radius: 15px !important;
 	background-color: rgba(0, 0, 0, 0.4) !important;
+	height: 500px; /* ✅ Fixed height */
+	max-width: 100%;
+	display: flex;
+	flex-direction: column;
 }
-.contacts_body {
-	padding: 0.75rem 0 !important;
-	overflow-y: auto;
-	white-space: nowrap;
-}
-.msg_card_body {
-	overflow-y: auto;
-}
+
 .card-header {
 	border-radius: 15px 15px 0 0 !important;
 	border-bottom: 0 !important;
+	flex-shrink: 0; /* ✅ Don't shrink header */
 }
+
 .card-footer {
 	border-radius: 0 0 15px 15px !important;
 	border-top: 0 !important;
+	flex-shrink: 0; /* ✅ Don't shrink footer */
 }
-.container {
-	align-content: center;
+
+/* ✅ Only message area scrolls with fixed height */
+.msg_card_body {
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 15px;
 }
-.search {
-	border-radius: 15px 0 0 15px !important;
-	background-color: rgba(0, 0, 0, 0.3) !important;
-	border: 0 !important;
-	color: white !important;
+
+/* Custom scrollbar for message area */
+.msg_card_body::-webkit-scrollbar {
+	width: 6px;
 }
-.search:focus {
-	box-shadow: none !important;
-	outline: 0px !important;
+
+.msg_card_body::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.2);
+	border-radius: 10px;
 }
+
+.msg_card_body::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 10px;
+}
+
+.msg_card_body::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.5);
+}
+
+#messageFormeight {
+	font-size: 0.8em;
+}
+
+/* ===== Input styling ===== */
 .type_msg {
 	background-color: rgba(0, 0, 0, 0.3) !important;
 	border: 0 !important;
@@ -51,17 +140,12 @@ html {
 	height: 60px !important;
 	overflow-y: auto;
 }
+
 .type_msg:focus {
 	box-shadow: none !important;
 	outline: 0px !important;
 }
-.attach_btn {
-	border-radius: 15px 0 0 15px !important;
-	background-color: rgba(0, 0, 0, 0.3) !important;
-	border: 0 !important;
-	color: white !important;
-	cursor: pointer;
-}
+
 .send_btn {
 	border-radius: 0 15px 15px 0 !important;
 	background-color: rgba(0, 0, 0, 0.3) !important;
@@ -69,39 +153,50 @@ html {
 	color: white !important;
 	cursor: pointer;
 }
-.search_btn {
-	border-radius: 0 15px 15px 0 !important;
-	background-color: rgba(0, 0, 0, 0.3) !important;
-	border: 0 !important;
-	color: white !important;
-	cursor: pointer;
-}
-.contacts {
-	list-style: none;
-	padding: 0;
-}
-.contacts li {
-	width: 100% !important;
-	padding: 5px 10px;
-	margin-bottom: 15px !important;
-}
-.active {
-	background-color: rgba(0, 0, 0, 0.3);
-}
-.user_img {
-	width: 80%; /* fills 80% of the container */
-	height: 80%;
-	border-radius: 50%; /* keeps icon circular if it has transparent background */
+
+/* ===== Chat bubbles ===== */
+.msg_cotainer {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-left: 10px;
+	border-radius: 25px;
+	background-color: rgb(82, 172, 255);
+	padding: 10px;
+	position: relative;
 }
 
-.user_img_msg {
-	height: 40px;
-	width: 40px;
-	border: 1.5px solid #f5f6fa;
+.msg_cotainer_send {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-right: 10px;
+	border-radius: 25px;
+	background-color: #58cc71;
+	padding: 10px;
+	position: relative;
 }
 
+.msg_time {
+	position: absolute;
+	left: 0;
+	bottom: -15px;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 10px;
+}
+
+.msg_time_send {
+	position: absolute;
+	right: 0;
+	bottom: -15px;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 10px;
+}
+
+.input-group-append {
+	margin-left: 0px;
+}
+/* ===== Avatar / header chat info ===== */
 .img_wrapper {
-	position: relative; /* for absolute positioning of online_icon */
+	position: relative;
 	width: 60px;
 	height: 60px;
 }
@@ -117,13 +212,44 @@ html {
 	overflow: hidden;
 }
 
+.user_img {
+	width: 70%;
+	height: 70%;
+	object-fit: contain;
+}
+
 .img_cont_msg {
 	height: 40px;
 	width: 40px;
+	flex-shrink: 0;
 }
+
+/* Default styling for message avatars */
+.img_cont_msg .img_cont {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: peachpuff; /* Default peachpuff for bot */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+/* User message avatar (yellow background) - OVERRIDE */
+.img_cont_msg.user-avatar .img_cont {
+	background-color: #ffdd40;
+}
+
+.user_img_msg {
+	height: 40px;
+	width: 40px;
+	border: 1.5px solid #f5f6fa;
+}
+
 .online_icon {
 	position: absolute;
-	bottom: -2px; /* slightly outside to avoid being cut */
+	bottom: -2px;
 	right: -2px;
 	width: 15px;
 	height: 15px;
@@ -132,105 +258,59 @@ html {
 	border: 2px solid white;
 }
 
-.offline {
-	background-color: #c23616 !important;
-}
 .user_info {
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-left: 15px;
 }
+
 .user_info span {
 	font-size: 20px;
 	color: white;
 }
+
 .user_info p {
 	font-size: 10px;
 	color: rgba(255, 255, 255, 0.6);
 }
-.video_cam {
-	margin-left: 50px;
-	margin-top: 5px;
-}
-.video_cam span {
-	color: white;
-	font-size: 20px;
-	cursor: pointer;
-	margin-right: 20px;
-}
-.msg_cotainer {
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-left: 10px;
-	border-radius: 25px;
-	background-color: rgb(82, 172, 255);
-	padding: 10px;
-	position: relative;
-}
-.msg_cotainer_send {
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-right: 10px;
-	border-radius: 25px;
-	background-color: #58cc71;
-	padding: 10px;
-	position: relative;
-}
-.msg_time {
-	position: absolute;
-	left: 0;
-	bottom: -15px;
-	color: rgba(255, 255, 255, 0.5);
-	font-size: 10px;
-}
-.msg_time_send {
-	position: absolute;
-	right: 0;
-	bottom: -15px;
-	color: rgba(255, 255, 255, 0.5);
-	font-size: 10px;
-}
-.msg_head {
-	position: relative;
-}
-#action_menu_btn {
-	position: absolute;
-	right: 10px;
-	top: 10px;
-	color: white;
-	cursor: pointer;
-	font-size: 20px;
-}
-.action_menu {
-	z-index: 1;
-	position: absolute;
+
+/* ===== Footer ===== */
+.app-footer {
+	background: rgba(0, 0, 0, 0.35);
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
 	padding: 15px 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	color: white;
-	border-radius: 15px;
-	top: 30px;
-	right: 15px;
-	display: none;
 }
-.action_menu ul {
-	list-style: none;
-	padding: 0;
+
+.footer-disclaimer {
+	font-size: 12px;
+	color: #ff6b6b;
+	margin-bottom: 6px;
+	font-weight: 500;
+}
+
+.footer-copy {
+	font-size: 10px;
+	color: rgba(255, 255, 255, 0.4);
 	margin: 0;
 }
-.action_menu ul li {
-	width: 100%;
-	padding: 10px 15px;
-	margin-bottom: 5px;
+
+/* ===== Responsive adjustments ===== */
+@media (max-width: 768px) {
+	.card {
+		height: 500px;
+	}
 }
-.action_menu ul li i {
-	padding-right: 10px;
-}
-.action_menu ul li:hover {
-	cursor: pointer;
-	background-color: rgba(0, 0, 0, 0.2);
-}
+
 @media (max-width: 576px) {
-	.contacts_card {
-		margin-bottom: 15px !important;
+	.card {
+		height: 450px;
+	}
+
+	.brand-title {
+		font-size: 18px;
+	}
+
+	.brand-subtitle {
+		font-size: 11px;
 	}
 }

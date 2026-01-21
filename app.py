@@ -44,7 +44,16 @@ docsearch = PineconeVectorStore.from_existing_index(
     embedding = embeddings,
     namespace="medical-docs"
 )
-retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k":3})
+# retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k":3})
+
+# With this:
+retriever = docsearch.as_retriever(
+    search_type="similarity_score_threshold",
+    search_kwargs={
+        "k": 3,
+        "score_threshold": 0.5  # Only return docs with similarity > 0.5
+    }
+)
 
 
 
@@ -64,7 +73,6 @@ memory = ConversationBufferWindowMemory(
 
 
 def gemini_runnable(messages):
-    # messages could be tuples like ('system', text) or objects with .content
     prompt_parts = []
     for m in messages:
         if isinstance(m, tuple):
@@ -74,11 +82,19 @@ def gemini_runnable(messages):
             prompt_parts.append(m.content)
     prompt = "\n".join(prompt_parts)
     
-    # response = model.generate_content(prompt)
-    # return response.text
     try:
+        # response = model.generate_content(prompt)
+        # return response.text
         response = model.generate_content(prompt)
-        return response.text
+        response_text = response.text
+        
+        # Replace the disclaimer with styled HTML version
+        disclaimer = "Please consult a healthcare professional for personalized medical advice."
+        if disclaimer in response_text:
+            styled_disclaimer = f'<span style="font-size: 0.75em; font-style: italic;">{disclaimer}</span>'
+            response_text = response_text.replace(disclaimer, styled_disclaimer)
+        
+        return response_text        
     except Exception as e:
         print(f"Error generating response: {e}")
         return f"I apologize, but I encountered an error: {str(e)}"
@@ -114,7 +130,7 @@ def index():
 def chat():
     msg = request.form["msg"]
     input = msg
-    print(input)
+    # print(input)
     # response = rag_chain.invoke(
     #     {
     #         "input": msg,
@@ -146,7 +162,7 @@ def chat():
             {"output": response["answer"]}
         )
         
-        print(f"Response: {response['answer']}")
+        # print(f"Response: {response['answer']}")
         return str(response["answer"])
     
     except Exception as e:
@@ -167,7 +183,7 @@ if __name__ == "__main__":
     # port = int(os.environ.get("PORT", 10000))
     # app.run(host="0.0.0.0", port=port)
     print("="*60)
-    print("Medical Chatbot Starting...")
+    print("MedAssist AI Starting...")
     print("="*60)
     
     port = int(os.environ.get("PORT", 10000))
