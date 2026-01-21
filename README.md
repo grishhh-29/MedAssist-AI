@@ -1,4 +1,4 @@
-# Medical-Chatbot
+# MedAssist AI
 
 # How to run?
 ### STEPS:
